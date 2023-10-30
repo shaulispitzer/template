@@ -1,15 +1,71 @@
 <template>
     <div class="flex flex-col min-h-screen">
-        <div class="header flex justify-between mx-5">
-            <div class="shrink-0 flex items-center">
+        <div class="header flex justify-between p-5 border border-black m-1">
+            <!-- Hamburgern open/close button shown on small screen only-->
+            <div
+                class="sm:hidden -mr-2 flex items-center dropdownopenclosebutton"
+            >
+                <button
+                    @click="
+                        showingNavigationDropdown = !showingNavigationDropdown
+                    "
+                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
+                >
+                    <svg
+                        class="h-6 w-6"
+                        stroke="currentColor"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            :class="{
+                                hidden: showingNavigationDropdown,
+                                'inline-flex': !showingNavigationDropdown,
+                            }"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"
+                        />
+                        <path
+                            :class="{
+                                hidden: !showingNavigationDropdown,
+                                'inline-flex': showingNavigationDropdown,
+                            }"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"
+                        />
+                    </svg>
+                </button>
+            </div>
+            <div class="shrink-0 flex items-center logo">
                 <Link :href="route('home')">
                     <ApplicationLogo
                         class="block h-9 w-auto fill-current text-gray-800"
                     />
                 </Link>
             </div>
-            <span>Default Layout{{ user?.name }}</span>
-            <!-- Logo -->
+
+            <!-- Primary Navigation Menu shown on big screen only-->
+            <nav class="sm:flex hidden bg-white flex-1 navigationBigScreens">
+                <div class="justify-between border border-blue-500">
+                    <!-- Navigation Links -->
+                    <div class="flex space-x-8 h-16 -my-px ml-10">
+                        <NavLink
+                            v-for="item in linkItems"
+                            :href="item.handler ? item.handler : '#'"
+                            :active="item.name"
+                            :current-route="currentRoute"
+                        >
+                            {{ item.label }}
+                        </NavLink>
+                    </div>
+                </div>
+
+                <!-- Responsive Navigation Menu shown on small screens when showing navigation is true -->
+            </nav>
             <Menu as="div" class="relative inline-block">
                 <MenuButton
                     class="inline-flex justify-center rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
@@ -26,6 +82,7 @@
                             clip-rule="evenodd"
                         />
                     </svg>
+                    {{ user ? userInitial : "Guest" }}
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -53,9 +110,12 @@
                         class="absolute right-0 z-10 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none"
                     >
                         <div class="px-1 py-1">
-                            <MenuItem v-slot="{ active }" v-if="user">
+                            <MenuItem
+                                v-slot="{ active }"
+                                v-if="user"
+                                @click="router.get(route('profile.edit'))"
+                            >
                                 <button
-                                    @click="router.get(route('profile.edit'))"
                                     :class="[
                                         active
                                             ? 'bg-violet-500 text-white'
@@ -83,8 +143,7 @@
                                     {{ user ? "Log Out" : "Log In" }}
                                 </button>
                             </MenuItem>
-                        </div>
-                        <div class="px-1 py-1">
+
                             <MenuItem v-slot="{ active }" v-if="!user">
                                 <button
                                     @click="router.get(route('register'))"
@@ -100,7 +159,7 @@
                             </MenuItem>
                         </div>
                         <div class="px-1 py-1">
-                            <MenuItem v-slot="{ active }">
+                            <MenuItem v-slot="{ active }" v-if="is_admin">
                                 <button
                                     :class="[
                                         active
@@ -109,13 +168,43 @@
                                         'group flex w-full items-center rounded-md px-2 py-2 text-sm',
                                     ]"
                                 >
-                                    Delete
+                                    Users
                                 </button>
                             </MenuItem>
                         </div>
                     </MenuItems>
                 </transition>
             </Menu>
+        </div>
+        <div
+            :class="{
+                block: showingNavigationDropdown,
+                hidden: !showingNavigationDropdown,
+            }"
+            class="sm:hidden linksInSmallScreen border border-purple-500"
+        >
+            <!-- Responsive Settings Options -->
+            <div class="pt-4 pb-1 border-t border-gray-300">
+                <div class="px-4">
+                    <div class="font-medium text-base text-gray-800">
+                        {{ $page.props.auth.user.name }}
+                    </div>
+                    <div class="font-medium text-sm text-gray-500">
+                        {{ $page.props.auth.user.email }}
+                    </div>
+                </div>
+
+                <div class="mt-3 space-y-1">
+                    <ResponsiveNavLink
+                        v-for="item in linkItems"
+                        :href="item.handler ? item.handler : '#'"
+                        :active="item.name"
+                        :current-route="currentRoute"
+                    >
+                        {{ item.label }}
+                    </ResponsiveNavLink>
+                </div>
+            </div>
         </div>
         <div class="grow grid">
             <slot />
@@ -126,6 +215,34 @@
 <script setup lang="ts">
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { user } from "../Composables/isAuthenticated";
+import { is_admin } from "@/Composables/isAdmin";
 import { Link, router } from "@inertiajs/vue3";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import { computed, ref } from "vue";
+
+import NavLink from "@/Components/NavLink.vue";
+import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
+
+const userInitial = computed(() => {
+    if (user.value) {
+        return user.value.name
+            .split(" ")
+            .map((word) => word.charAt(0))
+            .join("");
+    }
+});
+const showingNavigationDropdown = ref(false);
+
+const linkItems = computed(() => {
+    let items = [
+        { label: "Dashboard", handler: route("dashboard"), name: "dashboard" },
+        { label: "About", handler: null, name: "about" },
+        { label: "Contact", handler: null, name: "contact" },
+    ];
+    return items;
+});
+const currentRoute = ref(route().current());
+router.on("navigate", () => {
+    currentRoute.value = route().current();
+});
 </script>
