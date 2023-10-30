@@ -13,7 +13,7 @@
             <Menu as="div" class="relative inline-block">
                 <MenuButton
                     class="inline-flex justify-center rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
-                    >berel
+                >
                     <svg
                         class="ml-2 -mr-0.5 h-4 w-4 ui-open:rotate-180 transition-all"
                         xmlns="http://www.w3.org/2000/svg"
