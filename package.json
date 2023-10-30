@@ -25,7 +25,6 @@
         "@formkit/themes": "^1.2.2",
         "@formkit/vue": "^1.2.2",
         "@headlessui/tailwindcss": "^0.2.0",
-        "@headlessui/vue": "^1.7.16",
-        "@heroicons/vue": "^2.0.18"
+        "@headlessui/vue": "^1.7.16"
     }
 }
