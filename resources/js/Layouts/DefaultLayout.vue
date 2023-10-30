@@ -8,7 +8,7 @@
                     />
                 </Link>
             </div>
-            <span>Default Layout{{ user?.name }}</span>
+            <span>Default Layout{{ user?.name }} berel</span>
             <!-- Logo -->
             <Menu as="div" class="relative inline-block">
                 <MenuButton
