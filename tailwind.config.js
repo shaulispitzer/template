@@ -16,6 +16,9 @@ export default {
             fontFamily: {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
             },
+            screens: {
+                xl: "1170px",
+            },
         },
     },
     darkMode: "class",

@@ -1,7 +1,9 @@
 <template>
     <div class="flex flex-col min-h-screen">
-        <div class="header flex justify-between p-5 border border-black m-1">
-            <!-- Hamburgern open/close button shown on small screen only-->
+        <div
+            class="header flex justify-between px-5 p-2 xl:mx-auto xl:w-[1170px]"
+        >
+            <!-- Hamburger open/close button shown on small screen only-->
             <div
                 class="sm:hidden -mr-2 flex items-center dropdownopenclosebutton"
             >
@@ -40,7 +42,7 @@
                     </svg>
                 </button>
             </div>
-            <div class="shrink-0 flex items-center logo">
+            <div class="flex items-center logo">
                 <Link :href="route('home')">
                     <ApplicationLogo
                         class="block h-9 w-auto fill-current text-gray-800"
@@ -50,7 +52,7 @@
 
             <!-- Primary Navigation Menu shown on big screen only-->
             <nav class="sm:flex hidden bg-white flex-1 navigationBigScreens">
-                <div class="justify-between border border-blue-500">
+                <div class="justify-between">
                     <!-- Navigation Links -->
                     <div class="flex space-x-8 h-16 -my-px ml-10">
                         <NavLink
@@ -68,7 +70,7 @@
             </nav>
             <Menu as="div" class="relative inline-block">
                 <MenuButton
-                    class="inline-flex justify-center rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+                    class="inline-flex justify-center rounded-md bg-black/20 p-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
                 >
                     <svg
                         class="ml-2 -mr-0.5 h-4 w-4 ui-open:rotate-180 transition-all"
@@ -187,10 +189,10 @@
             <div class="pt-4 pb-1 border-t border-gray-300">
                 <div class="px-4">
                     <div class="font-medium text-base text-gray-800">
-                        {{ $page.props.auth.user.name }}
+                        {{ $page.props.auth.user?.name }}
                     </div>
                     <div class="font-medium text-sm text-gray-500">
-                        {{ $page.props.auth.user.email }}
+                        {{ $page.props.auth.user?.email }}
                     </div>
                 </div>
 
