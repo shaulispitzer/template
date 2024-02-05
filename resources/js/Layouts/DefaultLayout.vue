@@ -220,10 +220,11 @@ import { user } from "../Composables/isAuthenticated";
 import { is_admin } from "@/Composables/isAdmin";
 import { Link, router } from "@inertiajs/vue3";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
-import { computed, ref } from "vue";
+// import { computed, ref } from "vue";
 
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
+import { route } from "momentum-trail";
 
 const userInitial = computed(() => {
     if (user.value) {

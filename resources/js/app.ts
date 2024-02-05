@@ -5,7 +5,8 @@ import "@formkit/themes/genesis";
 import { createApp, h, DefineComponent } from "vue";
 import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
-import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
+import { trail } from "momentum-trail";
+import routes from "../scripts/routes/routes.json";
 import DefaultLayout from "./Layouts/DefaultLayout.vue";
 
 import { plugin as pluginFK, defaultConfig } from "@formkit/vue";
@@ -28,7 +29,7 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
-            .use(ZiggyVue, Ziggy)
+            .use(trail, { routes, absolute: true })
             .use(pluginFK, defaultConfig)
             .mount(el);
     },

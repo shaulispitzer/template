@@ -6,6 +6,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
+import { route } from "momentum-trail";
 
 defineProps<{
     canResetPassword?: boolean;
@@ -50,14 +51,6 @@ const submit = () => {
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
-                <FormKit
-                    name="age"
-                    type="text"
-                    label="Age"
-                    help="put a number here"
-                    validation="required|number|between:20,50"
-                    validation-visibility="live"
-                />
             </div>
 
             <div class="mt-4">

@@ -1,6 +1,8 @@
 import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 import vue from "@vitejs/plugin-vue";
+import { watch } from "vite-plugin-watch";
+import AutoImport from "unplugin-auto-import/vite";
 
 export default defineConfig({
     plugins: [
@@ -15,6 +17,15 @@ export default defineConfig({
                     includeAbsolute: false,
                 },
             },
+        }),
+        watch({
+            pattern: "routes/*.php",
+            command: "php artisan trail:generate",
+        }),
+        AutoImport({
+            vueTemplate: true,
+            dts: true,
+            imports: ["vue", { "momentum-trail": ["route", "current"] }],
         }),
     ],
 });
